@@ -16,7 +16,22 @@ export const mockCities: City[] = [
     safety: 4.7,
     weather: 3.8,
     coworking: 4.8,
-    tags: ['카페', '교통편의', '인프라', '문화']
+    tags: ['카페', '교통편의', '인프라', '문화'],
+    description: '대한민국의 수도로서 최첨단 인프라와 다양한 문화 콘텐츠를 제공하는 글로벌 도시입니다.',
+    highlights: ['24시간 인터넷 문화', '풍부한 카페 문화', '우수한 대중교통', '다양한 코워킹 스페이스'],
+    bestMonths: ['4월', '5월', '9월', '10월'],
+    timeZone: 'Asia/Seoul',
+    currency: 'KRW',
+    language: '한국어',
+    visaRequirement: '90일 무비자 (관광목적)',
+    averageTemperature: { summer: 28, winter: -2 },
+    popularDistricts: ['강남구', '홍대', '이태원', '종로', '명동'],
+    nearbyAttractions: ['경복궁', '남산타워', '한강공원', '동대문', '명동'],
+    coworkingSpaces: [
+      { name: '위워크 강남', pricePerDay: 35000, rating: 4.5 },
+      { name: '스파크플러스 홍대', pricePerDay: 28000, rating: 4.3 },
+      { name: '패스트파이브 종로', pricePerDay: 32000, rating: 4.4 }
+    ]
   },
   {
     id: 'busan',
@@ -33,7 +48,22 @@ export const mockCities: City[] = [
     safety: 4.5,
     weather: 4.2,
     coworking: 4.0,
-    tags: ['바다', '온화한기후', '해산물', '항구']
+    tags: ['바다', '온화한기후', '해산물', '항구'],
+    description: '바다와 산이 어우러진 아름다운 항구도시로, 온화한 기후와 합리적인 생활비가 매력적입니다.',
+    highlights: ['아름다운 해변과 바다 전망', '서울 대비 저렴한 생활비', '신선한 해산물', '온화한 기후'],
+    bestMonths: ['3월', '4월', '5월', '9월', '10월', '11월'],
+    timeZone: 'Asia/Seoul',
+    currency: 'KRW',
+    language: '한국어',
+    visaRequirement: '90일 무비자 (관광목적)',
+    averageTemperature: { summer: 26, winter: 3 },
+    popularDistricts: ['해운대', '서면', '광안리', '남포동', '기장'],
+    nearbyAttractions: ['해운대해수욕장', '광안대교', '감천문화마을', '태종대', '벡스코'],
+    coworkingSpaces: [
+      { name: '버티컬 해운대', pricePerDay: 25000, rating: 4.2 },
+      { name: '스파크플러스 서면', pricePerDay: 22000, rating: 4.0 },
+      { name: '위워크 센텀시티', pricePerDay: 30000, rating: 4.3 }
+    ]
   },
   {
     id: 'jeju',
@@ -50,7 +80,22 @@ export const mockCities: City[] = [
     safety: 4.8,
     weather: 4.5,
     coworking: 3.8,
-    tags: ['자연', '휴양지', '청정', '관광']
+    tags: ['자연', '휴양지', '청정', '관광'],
+    description: '천혜의 자연환경을 자랑하는 섬으로, 워케이션의 최적지이자 힐링이 필요한 노마드들의 성지입니다.',
+    highlights: ['청정한 자연환경', '온화한 기후', '독특한 섬 문화', '힐링 워케이션'],
+    bestMonths: ['3월', '4월', '5월', '9월', '10월', '11월'],
+    timeZone: 'Asia/Seoul',
+    currency: 'KRW',
+    language: '한국어',
+    visaRequirement: '90일 무비자 (관광목적)',
+    averageTemperature: { summer: 25, winter: 5 },
+    popularDistricts: ['제주시', '서귀포', '애월', '성산', '한림'],
+    nearbyAttractions: ['한라산', '성산일출봉', '만장굴', '중문관광단지', '우도'],
+    coworkingSpaces: [
+      { name: '제주창조경제혁신센터', pricePerDay: 20000, rating: 4.0 },
+      { name: '애월 워크스페이스', pricePerDay: 18000, rating: 3.9 },
+      { name: '서귀포 코워킹', pricePerDay: 22000, rating: 3.8 }
+    ]
   },
   {
     id: 'gangneung',
@@ -67,7 +112,22 @@ export const mockCities: City[] = [
     safety: 4.6,
     weather: 4.1,
     coworking: 3.5,
-    tags: ['바다', '커피', '조용함', '자연']
+    tags: ['바다', '커피', '조용함', '자연'],
+    description: '동해바다와 산이 만나는 아름다운 도시로, 유명한 커피 문화와 조용한 분위기가 매력적입니다.',
+    highlights: ['유명한 카페 거리', '아름다운 동해바다', '조용한 작업환경', '합리적인 생활비'],
+    bestMonths: ['4월', '5월', '6월', '9월', '10월'],
+    timeZone: 'Asia/Seoul',
+    currency: 'KRW',
+    language: '한국어',
+    visaRequirement: '90일 무비자 (관광목적)',
+    averageTemperature: { summer: 24, winter: -1 },
+    popularDistricts: ['교동', '강문해변', '안목해변', '주문진', '정동진'],
+    nearbyAttractions: ['안목해변', '오죽헌', '정동진', '경포대', '주문진항'],
+    coworkingSpaces: [
+      { name: '안목 카페워크', pricePerDay: 15000, rating: 3.7 },
+      { name: '강릉 코워킹센터', pricePerDay: 18000, rating: 3.5 },
+      { name: '교동 워크라운지', pricePerDay: 16000, rating: 3.6 }
+    ]
   },
   {
     id: 'daegu',

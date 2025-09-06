@@ -1,3 +1,6 @@
+'use client';
+
+import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { 
@@ -8,7 +11,8 @@ import {
   Wifi, 
   Heart,
   ArrowRight,
-  Sparkles
+  Sparkles,
+  X
 } from 'lucide-react';
 import type { PersonalizationFeature } from '@/types';
 
@@ -46,7 +50,7 @@ const personalizationFeatures: PersonalizationFeature[] = [
 ];
 
 function getIcon(iconName: string) {
-  const iconMap: { [key: string]: React.ComponentType<any> } = {
+  const iconMap: { [key: string]: React.ComponentType<{ className?: string }> } = {
     Target,
     MapPin,
     DollarSign,
@@ -73,7 +77,139 @@ function FeatureCard({ feature }: { feature: PersonalizationFeature }) {
   );
 }
 
+function OnboardingModal({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }) {
+  const [step, setStep] = useState(1);
+  const [formData, setFormData] = useState({
+    occupation: '',
+    budget: '',
+    lifestyle: '',
+    priorities: [] as string[]
+  });
+
+  if (!isOpen) return null;
+
+  const handleNext = () => {
+    if (step < 4) {
+      setStep(step + 1);
+    } else {
+      // 완료 로직
+      alert('맞춤 추천을 위한 정보가 저장되었습니다! (실제로는 API 호출)');
+      onClose();
+    }
+  };
+
+  const handleBack = () => {
+    if (step > 1) {
+      setStep(step - 1);
+    }
+  };
+
+  return (
+    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+      <div className="bg-white rounded-2xl shadow-2xl max-w-lg w-full max-h-[90vh] overflow-y-auto">
+        <div className="p-6">
+          <div className="flex justify-between items-center mb-6">
+            <div>
+              <h3 className="text-2xl font-bold text-gray-900">맞춤 추천 설정</h3>
+              <p className="text-sm text-gray-600">단계 {step}/4</p>
+            </div>
+            <Button variant="ghost" size="sm" onClick={onClose}>
+              <X className="h-5 w-5" />
+            </Button>
+          </div>
+
+          {step === 1 && (
+            <div className="space-y-4">
+              <h4 className="text-lg font-semibold mb-4">직업을 선택해주세요</h4>
+              <div className="grid grid-cols-2 gap-3">
+                {['개발자', '디자이너', '마케터', '프리랜서', '기타'].map((job) => (
+                  <Button
+                    key={job}
+                    variant={formData.occupation === job ? 'default' : 'outline'}
+                    onClick={() => setFormData({ ...formData, occupation: job })}
+                    className="h-12"
+                  >
+                    {job}
+                  </Button>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {step === 2 && (
+            <div className="space-y-4">
+              <h4 className="text-lg font-semibold mb-4">월 예산을 선택해주세요</h4>
+              <div className="space-y-3">
+                {['150만원 이하', '150-250만원', '250만원 이상'].map((budget) => (
+                  <Button
+                    key={budget}
+                    variant={formData.budget === budget ? 'default' : 'outline'}
+                    onClick={() => setFormData({ ...formData, budget })}
+                    className="w-full h-12 justify-start"
+                  >
+                    {budget}
+                  </Button>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {step === 3 && (
+            <div className="space-y-4">
+              <h4 className="text-lg font-semibold mb-4">선호하는 라이프스타일은?</h4>
+              <div className="space-y-3">
+                {['도시형 (편의시설, 교통)', '자연형 (산, 공원, 조용함)', '해변형 (바다, 휴양)'].map((lifestyle) => (
+                  <Button
+                    key={lifestyle}
+                    variant={formData.lifestyle === lifestyle ? 'default' : 'outline'}
+                    onClick={() => setFormData({ ...formData, lifestyle })}
+                    className="w-full h-12 justify-start text-left"
+                  >
+                    {lifestyle}
+                  </Button>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {step === 4 && (
+            <div className="text-center space-y-4">
+              <div className="text-6xl mb-4">🎉</div>
+              <h4 className="text-lg font-semibold mb-2">설정이 완료되었습니다!</h4>
+              <p className="text-gray-600 mb-4">
+                입력해주신 정보를 바탕으로 맞춤 도시를 추천해드리겠습니다.
+              </p>
+              <div className="bg-blue-50 p-4 rounded-lg text-left text-sm">
+                <div className="font-medium text-blue-900 mb-2">설정 요약:</div>
+                <div className="text-blue-800">
+                  • 직업: {formData.occupation}<br/>
+                  • 예산: {formData.budget}<br/>
+                  • 스타일: {formData.lifestyle}
+                </div>
+              </div>
+            </div>
+          )}
+
+          <div className="flex justify-between pt-6 mt-6 border-t">
+            {step > 1 && (
+              <Button variant="outline" onClick={handleBack}>
+                이전
+              </Button>
+            )}
+            <div className={step === 1 ? 'ml-auto' : ''}>
+              <Button onClick={handleNext}>
+                {step === 4 ? '완료' : '다음'}
+              </Button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 export default function PersonalizedRecommendation() {
+  const [isModalOpen, setIsModalOpen] = useState(false);
   return (
     <section className="py-16 bg-gradient-to-br from-blue-50 to-indigo-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -138,7 +274,11 @@ export default function PersonalizedRecommendation() {
           </div>
 
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Button size="lg" className="px-8 py-3 text-lg bg-blue-600 hover:bg-blue-700">
+            <Button 
+              size="lg" 
+              className="px-8 py-3 text-lg bg-blue-600 hover:bg-blue-700"
+              onClick={() => setIsModalOpen(true)}
+            >
               <Sparkles className="mr-2 h-5 w-5" />
               지금 시작하기
             </Button>
@@ -155,6 +295,11 @@ export default function PersonalizedRecommendation() {
           </div>
         </div>
       </div>
+      
+      <OnboardingModal 
+        isOpen={isModalOpen} 
+        onClose={() => setIsModalOpen(false)} 
+      />
     </section>
   );
 }

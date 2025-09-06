@@ -1,81 +1,16 @@
+'use client';
+
+import React from 'react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Star, Users, TrendingUp, ArrowRight } from 'lucide-react';
+import { useSearch } from '@/utils/SearchContext';
+import { Spinner } from '@/components/ui/spinner';
 import type { City } from '@/types';
 
-const popularCities: City[] = [
-  {
-    id: '1',
-    name: '서울',
-    region: '서울특별시',
-    rating: 4.2,
-    monthlyBudget: 2850000,
-    nomadCount: 2847,
-    growthRate: 15,
-    livingCost: 2850000,
-    housingCost: 1500000,
-    transportation: 5,
-    internet: 5,
-    safety: 4,
-    weather: 3,
-    coworking: 5,
-    tags: ['대도시', '교통편리', '다양한문화'],
-  },
-  {
-    id: '2',
-    name: '부산',
-    region: '부산광역시',
-    rating: 4.0,
-    monthlyBudget: 1950000,
-    nomadCount: 891,
-    growthRate: 28,
-    livingCost: 1950000,
-    housingCost: 900000,
-    transportation: 4,
-    internet: 4,
-    safety: 4,
-    weather: 4,
-    coworking: 3,
-    tags: ['해변도시', '온화한기후', '저렴한비용'],
-  },
-  {
-    id: '3',
-    name: '제주',
-    region: '제주특별자치도',
-    rating: 4.3,
-    monthlyBudget: 2200000,
-    nomadCount: 456,
-    growthRate: 5,
-    livingCost: 2200000,
-    housingCost: 1100000,
-    transportation: 2,
-    internet: 4,
-    safety: 5,
-    weather: 5,
-    coworking: 3,
-    tags: ['자연친화', '아름다운경관', '힐링'],
-  },
-  {
-    id: '4',
-    name: '강릉',
-    region: '강원도',
-    rating: 3.9,
-    monthlyBudget: 1650000,
-    nomadCount: 234,
-    growthRate: 45,
-    livingCost: 1650000,
-    housingCost: 800000,
-    transportation: 2,
-    internet: 3,
-    safety: 5,
-    weather: 4,
-    coworking: 2,
-    tags: ['해변', '조용함', '저렴함'],
-  },
-];
 
-function CityCard({ city }: { city: City }) {
+const CityCard = React.memo(function CityCard({ city }: { city: City }) {
   const formatBudget = (amount: number) => {
     return `₩${Math.floor(amount / 10000)}만`;
   };
@@ -139,7 +74,7 @@ function CityCard({ city }: { city: City }) {
         <div className="flex flex-wrap gap-2 mb-4">
           {city.tags.slice(0, 3).map((tag, index) => (
             <Badge key={index} variant="outline" className="text-xs">
-              {tag}
+              #{tag}
             </Badge>
           ))}
         </div>
@@ -154,34 +89,67 @@ function CityCard({ city }: { city: City }) {
       </CardContent>
     </Card>
   );
-}
+});
 
 export default function PopularCitiesSection() {
+  const { filteredCities, searchQuery, filters, isLoading } = useSearch();
+  
+  // 검색이나 필터가 활성화된 경우 필터된 결과를 보여주고,
+  // 그렇지 않으면 성장률 순으로 정렬된 인기 도시들을 보여줌
+  const hasSearchOrFilters = searchQuery || Object.values(filters).some(value => value && value !== '');
+  const displayCities = hasSearchOrFilters 
+    ? filteredCities.slice(0, 4)
+    : filteredCities.sort((a, b) => b.growthRate - a.growthRate).slice(0, 4);
+  
+  const sectionTitle = hasSearchOrFilters ? '검색 결과' : '인기 급상승 도시';
+  const sectionDescription = hasSearchOrFilters 
+    ? `${filteredCities.length}개의 도시가 검색되었습니다`
+    : '디지털 노마드들이 주목하는 트렌딩 도시들을 만나보세요';
+
   return (
     <section className="py-16 bg-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-12">
           <div className="flex justify-center items-center space-x-2 mb-4">
-            <span className="text-2xl">🔥</span>
-            <h2 className="text-3xl lg:text-4xl font-bold text-gray-900">인기 급상승 도시</h2>
+            <span className="text-2xl">{hasSearchOrFilters ? '🔍' : '🔥'}</span>
+            <h2 className="text-3xl lg:text-4xl font-bold text-gray-900">{sectionTitle}</h2>
           </div>
           <p className="text-lg text-gray-600">
-            디지털 노마드들이 주목하는 트렌딩 도시들을 만나보세요
+            {sectionDescription}
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-          {popularCities.map((city) => (
-            <CityCard key={city.id} city={city} />
-          ))}
-        </div>
+        {isLoading ? (
+          <div className="text-center py-12">
+            <Spinner size="lg" className="mx-auto mb-4" />
+            <h3 className="text-lg font-semibold text-gray-900 mb-2">도시 정보를 불러오고 있습니다...</h3>
+            <p className="text-gray-600">잠시만 기다려주세요</p>
+          </div>
+        ) : displayCities.length === 0 ? (
+          <div className="text-center py-12">
+            <div className="text-6xl mb-4">😔</div>
+            <h3 className="text-xl font-semibold text-gray-900 mb-2">검색 결과가 없습니다</h3>
+            <p className="text-gray-600 mb-6">다른 검색어나 필터를 시도해보세요</p>
+            <Button variant="outline">
+              필터 초기화
+            </Button>
+          </div>
+        ) : (
+          <>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+              {displayCities.map((city) => (
+                <CityCard key={city.id} city={city} />
+              ))}
+            </div>
 
-        <div className="text-center">
-          <Button size="lg" className="px-8 py-3 text-lg">
-            더 많은 도시 보기
-            <ArrowRight className="ml-2 h-5 w-5" />
-          </Button>
-        </div>
+            <div className="text-center">
+              <Button size="lg" className="px-8 py-3 text-lg">
+                더 많은 도시 보기
+                <ArrowRight className="ml-2 h-5 w-5" />
+              </Button>
+            </div>
+          </>
+        )}
       </div>
     </section>
   );

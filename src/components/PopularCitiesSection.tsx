@@ -1,6 +1,7 @@
 'use client';
 
 import React from 'react';
+import Link from 'next/link';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -30,8 +31,9 @@ const CityCard = React.memo(function CityCard({ city }: { city: City }) {
   };
 
   return (
-    <Card className="hover:shadow-lg transition-all duration-300 cursor-pointer group">
-      <CardContent className="p-6">
+    <Link href={`/cities/${city.id}`}>
+      <Card className="hover:shadow-lg transition-all duration-300 cursor-pointer group">
+        <CardContent className="p-6">
         <div className="flex items-start justify-between mb-4">
           <div className="flex items-center space-x-3">
             <span className="text-3xl">{getCityEmoji(city.name)}</span>
@@ -79,15 +81,16 @@ const CityCard = React.memo(function CityCard({ city }: { city: City }) {
           ))}
         </div>
 
-        <Button 
-          variant="outline" 
-          className="w-full group-hover:bg-blue-50 group-hover:border-blue-200 transition-colors"
-        >
-          자세히 보기
-          <ArrowRight className="ml-2 h-4 w-4" />
-        </Button>
-      </CardContent>
-    </Card>
+          <Button 
+            variant="outline" 
+            className="w-full group-hover:bg-blue-50 group-hover:border-blue-200 transition-colors"
+          >
+            자세히 보기
+            <ArrowRight className="ml-2 h-4 w-4" />
+          </Button>
+        </CardContent>
+      </Card>
+    </Link>
   );
 });
 

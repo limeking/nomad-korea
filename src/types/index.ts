@@ -15,6 +15,25 @@ export interface City {
   coworking: number;
   image?: string;
   tags: string[];
+  description?: string;
+  highlights?: string[];
+  bestMonths?: string[];
+  timeZone?: string;
+  currency?: string;
+  language?: string;
+  visaRequirement?: string;
+  averageTemperature?: {
+    summer: number;
+    winter: number;
+  };
+  popularDistricts?: string[];
+  nearbyAttractions?: string[];
+  coworkingSpaces?: {
+    name: string;
+    pricePerDay: number;
+    rating: number;
+  }[];
+  reviews?: CityReview[];
 }
 
 export interface CommunityPost {
@@ -146,4 +165,22 @@ export interface RegisterData {
 export interface LoginData {
   email: string;
   password: string;
+}
+
+export interface CityReview {
+  id: string;
+  cityId: string;
+  userId: string;
+  author: string;
+  avatar: string;
+  rating: number;
+  title: string;
+  content: string;
+  pros: string[];
+  cons: string[];
+  stayDuration: string;
+  occupation: string;
+  createdAt: string;
+  likes: number;
+  isHelpful: boolean;
 }
